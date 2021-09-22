@@ -3,6 +3,9 @@
   <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addEmployee">
     Pegawai Baru
   </button>
+  <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#unregUID">
+    List Antrean (develop)
+  </button>
   <p><b><?php echo $this->session->flashdata('fail'); ?></b></p>
 </div>
 

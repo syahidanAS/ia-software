@@ -47,17 +47,27 @@
                         </ul>
                     </div>
 
-                    <?php foreach ($operationalHour as $op) { ?>
-                        <a type="button" class="btn btn-secondary text-light" data-toggle="modal" data-target="#operationalHour<?php echo $op->id ?>">
-                            <i class="fa fa-clock fa-lg"><span class="m-2">Jam Operasional</span></i>
-                        </a>
-                    <?php } ?>
 
+
+
+                    <div class="btn-group">
+
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <b>Jam Operasional</b>
+                        </button>
+                        <ul class="dropdown-menu p-2" role="menu">
+                            <?php foreach ($operationalHour as $op) { ?>
+                                <li> <a type="button" class="" data-toggle="modal" data-target="#operationalHour<?php echo $op->id ?>">
+                                        Pegawai</a></li>
+                            <?php } ?>
+                            <li><a href="<?php echo base_url('Admin/specific_operation') ?>" style="color: #000;">Operasional Khusus</a></li>
+                        </ul>
+                    </div>
 
 
 
                 </div>
-                <div class="card-body">
+                <div class=" card-body">
 
                     <div class="table-responsive">
                         <span class="">

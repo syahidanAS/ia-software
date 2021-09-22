@@ -19,6 +19,7 @@
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="<?php echo base_url('assets/demo/demo.css') ?>" rel="stylesheet" />
   <link rel="stylesheet" href="<?php echo base_url('assets/panel.css') ?>">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/jquery.dataTables.min.css') ?>">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/buttons.dataTables.min.css') ?>">
 </head>

@@ -5,8 +5,8 @@
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
       <div class="logo">
-        <a href="<?php echo base_url('Admin/dashboard') ?>" class="simple-text logo-normal">
-          Interconnect Data
+        <a href="<?php echo base_url('Admin/dashboard') ?>" class="">
+          <img src="<php echo base_url('assets/logo.jpg') ?>" alt="logo">
         </a>
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">

@@ -1,7 +1,6 @@
 <?php
 class M_admin extends CI_Model
 {
-
 	//MODEL MASTER
 	function employees()
 	{
@@ -52,8 +51,8 @@ class M_admin extends CI_Model
 		$this->db->from('attendance');
 		$this->db->join('employee', 'attendance.uid = employee.uid');
 		$this->db->where("attendance.tgl BETWEEN '$from' AND '$to' ");
-		// $this->db->group_by('attendance.uid');
-		$this->db->limit('1');
+		$this->db->order_by('attendance.tgl');
+		$this->db->order_by('attendance.uid');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -82,6 +81,7 @@ class M_admin extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('operation');
+		$this->db->where('id', '1');
 		$query = $this->db->get();
 		return $query->result();
 	}

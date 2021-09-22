@@ -29,7 +29,7 @@
                 <td>
                   <div class="form-group">
                     <label>Id Kartu</label>
-                    <input class="form-control" id="uid" style="background: #d6d4d4;" type="text" name="uid" placeholder="SILAHKAN SCAN KARTU" readonly required>
+                    <input class="form-control" id="uid" style="color:#000000;" type="text" name="uid" readonly>
                   </div>
                   <div class="form-group">
                     <label>Nama Lengkap</label>

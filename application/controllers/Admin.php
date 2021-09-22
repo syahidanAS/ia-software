@@ -37,6 +37,7 @@ class Admin extends CI_Controller
 		$this->load->view('admin/modals/addEmployee', $data);
 		$this->load->view('admin/modals/modalDelete', $data);
 		$this->load->view('admin/modals/employeeEdit', $data);
+		$this->load->view('admin/modals/unregUid', $data);
 		$this->load->view('admin/scripts/datatable');
 		$this->load->view('admin/scripts/cardScanner');
 	}
@@ -98,6 +99,16 @@ class Admin extends CI_Controller
 		$this->load->view('admin/modals/operationalHour', $data);
 		$this->load->view('admin/modals/earlyOut', $data);
 		$this->load->view('admin/scripts/datatable');
+	}
+
+	public function specific_operation()
+	{
+		$data['employees'] = $this->M_admin->employees();
+		$data['positions'] = $this->M_admin->positionMaster();
+		$data['unregUID'] = $this->M_admin->unregisteredUID();
+		$this->load->view('admin/headers/header');
+		$this->load->view('admin/navbars/navbar');
+		$this->load->view('admin/specific_operational.php', $data);
 	}
 
 	public function export()
@@ -241,7 +252,7 @@ class Admin extends CI_Controller
 		$objPHPExcel = new PHPExcel();
 		$objPHPExcel->getActiveSheet()->getStyle("A1:E1")->getFont()->setSize(12);
 		$objPHPExcel->getActiveSheet()
-			->getStyle('A1:D1')
+			->getStyle('A1:F1')
 			->getFill()
 			->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
 			->getStartColor()
@@ -252,28 +263,46 @@ class Admin extends CI_Controller
 		$objPHPExcel->getProperties()->setTitle("Rekap Absensi");
 		$objPHPExcel->getProperties()->setSubject("");
 		$objPHPExcel->getProperties()->setDescription("");
-
 		$objPHPExcel->setActiveSheetIndex(0);
 		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Tanggal');
 		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Nama');
 		$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Jam Masuk');
 		$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Jam Keluar');
 		$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Deskripsi');
-
-
+		$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Durasi Bekerja');
 		$baris = 2;
-
-
 		foreach ($data['attendances'] as $data) {
 			$objPHPExcel->getActiveSheet()->setCellValue('A' . $baris,  longdate_indo($data->tgl));
 			$objPHPExcel->getActiveSheet()->setCellValue('B' . $baris, $data->name);
 			$objPHPExcel->getActiveSheet()->setCellValue('C' . $baris, $data->time_in);
 			$objPHPExcel->getActiveSheet()->setCellValue('D' . $baris, $data->time_out);
-			if ($data->description == "") {
-				$objPHPExcel->getActiveSheet()->setCellValue('E' . $baris, "Hadir");
-			} else {
+			if ($data->time_in != "00:00:00" && $data->time_out != "00:00:00" && $data->description != "") {
+				$objPHPExcel->getActiveSheet()->setCellValue('E' . $baris, "Hadir,pulang cepat ($data->description)");
+			} else if ($data->time_in != "00:00:00" && $data->time_out != "00:00:00" && $data->description == "") {
+				$objPHPExcel->getActiveSheet()->setCellValue('E' . $baris, "HADIR");
+			} else if ($data->time_out == "00:00:00" && $data->description == "") {
+				$objPHPExcel->getActiveSheet()->setCellValue('E' . $baris, "Belum melakukan absensi keluar");
+			} else if ($data->description != "") {
 				$objPHPExcel->getActiveSheet()->setCellValue('E' . $baris, $data->description);
 			}
+
+			$in_hour = date('H', strtotime($data->time_in));
+			$out_hour = date('H', strtotime($data->time_out));
+			$in_minute = date('i', strtotime($data->time_in));
+			$out_minute = date('i', strtotime($data->time_out));
+
+			$hasil = (intVal($out_hour) - intVal($in_hour)) * 60 + (intVal($out_minute) - intVal($in_minute));
+			$hasil = $hasil / 60;
+			$hasil = number_format($hasil, 2);
+
+			if ($data->time_in != "00:00:00" && $data->time_out != "00:00:00") {
+				$objPHPExcel->getActiveSheet()->setCellValue('F' . $baris, $hasil . " (Jam/Menit)");
+			} else if ($data->time_in != "00:00:00" || $data->time_out != "00:00:00") {
+				$objPHPExcel->getActiveSheet()->setCellValue('F' . $baris, "-");
+			} else if ($data->time_in == "00:00:00" && $data->time_out == "00:00:00") {
+				$objPHPExcel->getActiveSheet()->setCellValue('F' . $baris, "-");
+			}
+
 
 
 			$baris++;
